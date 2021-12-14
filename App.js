@@ -124,6 +124,8 @@ const App =()=>{
   const [l5word3s,setl5word3] = useState(false)
   const [l5word4s,setl5word4] = useState(false)
   //######################################################################################################################################################################################################
+  
+  // added states for leaderboard user and score and level 
   const [score,setScore] = useState(0)
   const [user, setUser] = useState(null);
   const [level,setLevel] = useState(0)
@@ -131,7 +133,7 @@ const App =()=>{
 
   const [answerInput,setAnswerInput] = useState('')
 
-
+  // added fn to query firebase's Leaderboard and display sorted by score
   async function showLeaderBoard() {
     //  setButtonText("Play Existing Game!");
      
@@ -154,6 +156,7 @@ const App =()=>{
     }
     
   }
+  // added this to store game results to firebase
   async function storeGameResults() {
      try {
       /*const docRef =*/ await addDoc(collection(firestore, "LeaderBoard"), {
