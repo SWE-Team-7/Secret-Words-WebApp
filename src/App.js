@@ -224,11 +224,31 @@ const App =()=>{
   const[leader,setleader] = useState(false)
 
   const Leader =()=>{
-    console.log(leaderBoard[0]);
-      return (
-          <p>{leaderBoard[0].user}</p>
-      );
-     
+    return (
+      <div>
+        <div class ="ranks">
+          <p>Rank</p>
+          <p>1</p>
+          <p>2</p>
+          <p>3</p>
+          <p>4</p>
+        </div>
+        <div class ="scores">
+        <p>Score</p>
+        <p>2000</p>
+        <p>1400</p>
+        <p>1200</p>
+        <p>1000</p>
+        </div>
+        <div class ="users">
+        <p>User</p>
+        <p>Khalil</p>
+        <p>Shail</p>
+        <p>Tyrone</p>
+        <p>Avon</p>
+        </div>
+      </div>
+    );
 }
 
   const activeLeaderboard =()=>{
@@ -249,7 +269,7 @@ const App =()=>{
      
      try {
        const q = query(collection(firestore, "LeaderBoard"), orderBy("score"));
-       
+       console.log(q);
        
        const querySnapshot = await getDocs(q);
        
@@ -375,7 +395,7 @@ const App =()=>{
 
   
 
-  if(logIn){
+  if(!logIn){
     return(
       <Login/>
     )

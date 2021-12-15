@@ -221,7 +221,7 @@ h1 {
   text-align: center;
   font-size: 42px;
   position: absolute;
-  top: 100px;
+  top: 50px;
   left: 80px;
   font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
 }
@@ -230,7 +230,7 @@ h1 {
   text-align: center;
   font-size: 42px;
   position: absolute;
-  top: 100px;
+  top: 50px;
   right:80px;
   font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
 }
@@ -239,7 +239,7 @@ h1 {
   text-align: center;
   font-size: 42px;
   position: absolute;
-  top: 100px;
+  top: 50px;
   left:580px;
   font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
 }
