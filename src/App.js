@@ -2,7 +2,7 @@ import './App.css';
 import React,{ useState } from 'react';
 import {firestore} from './firebase.js';
 import { collection, addDoc, query, getDocs, orderBy, limit } from "firebase/firestore";
-import LoginButton from './loginButton.js';
+import firebase from 'firebase/compat/app';
 
 const Show=({word,state})=>{
   let words = word.split(" ");
@@ -68,21 +68,7 @@ const Hinter =({state1,state2,state3,state4,hint1,hint2,hint3,hint4})=>{
 }
 
 
-const Leader =()=>{
-  return(
-    <div>
-      <div class ="ranks">
-      Rank
-      </div>
-      <div class ="users">
-      User
-      </div>
-      <div class ="scores">
-        Score
-      </div>
-    </div>
-  )
-}
+
 
 
 
@@ -94,6 +80,28 @@ const Leader =()=>{
 
 const App =()=>{
   
+  const LoginButton=({setUser})=> {
+    // this is auth code for login
+    const logIn=() =>{
+      var provider = new firebase.auth.GoogleAuthProvider(); 
+     firebase.auth().signInWithPopup(provider).then(function(result) {
+        console.log(result.user);
+        setUser(result.user);
+        setlogIn(true)
+      }).catch(function(error) {
+        console.log(error);
+     });
+     
+  
+    }
+    //
+    return (
+      <button class ="login"onClick={() => logIn()}>
+        Login
+      </button>
+            );
+    }
+
   const Login=()=>{
     console.log("clicked")
     return(
@@ -211,9 +219,21 @@ const App =()=>{
   //######################################################################################################################################################################################################
   const[score,setScore] = useState(0)
   const [user, setUser] = useState(null);
+  const [level,setLevel] = useState(0)
+  const [leaderBoard, setLeaderBoard] = useState([]);
   const[leader,setleader] = useState(false)
 
+  const Leader =()=>{
+    console.log(leaderBoard[0]);
+      return (
+          <p>{leaderBoard[0].user}</p>
+      );
+     
+}
+
   const activeLeaderboard =()=>{
+    storeGameResults();
+    showLeaderBoard();
     setleader(true)
     console.log('woo')
   }
@@ -224,6 +244,42 @@ const App =()=>{
   }
   const [answerInput,setAnswerInput] = useState('')
 
+  async function showLeaderBoard() {
+    //  setButtonText("Play Existing Game!");
+     
+     try {
+       const q = query(collection(firestore, "LeaderBoard"), orderBy("score"));
+       
+       
+       const querySnapshot = await getDocs(q);
+       
+       querySnapshot.forEach((doc) => {
+              
+       console.log(doc.id, " => ", doc.data());
+        
+       leaderBoard.push(doc.data());                
+       setLeaderBoard([...leaderBoard, leaderBoard]);  //doc.boardSize, doc.solveTime, doc.playerName
+       console.log("Entry = ", leaderBoard);
+      });
+    } catch (e) {
+      console.error("Error adding document: ", e);
+    }
+    
+  }
+  // added this to store game results to firebase
+  async function storeGameResults() {
+     try {
+      /*const docRef =*/ await addDoc(collection(firestore, "LeaderBoard"), {
+      score: score,
+      user: user.displayName,
+      level: level    
+      //total_time: //time stamp, OPTIONAL
+      });  
+    } catch (e) {
+      console.error("Error adding document: ", e);
+    }
+    console.log("ENTERED store game results");
+  }
   const inputChange =(event)=>{
     setAnswerInput(()=>event.target.value)
     console.log(event.target.value)
@@ -319,7 +375,7 @@ const App =()=>{
 
   
 
-  if(!logIn){
+  if(logIn){
     return(
       <Login/>
     )
@@ -480,7 +536,13 @@ const App =()=>{
         </div>)
     }
     else{
-      return(<p>You Beat the Game you got a score of :{score}</p>)
+      return(
+        <div>
+          <Nav/>
+          <Leader/>
+        </div>
+          
+        )
     }
   }
 
